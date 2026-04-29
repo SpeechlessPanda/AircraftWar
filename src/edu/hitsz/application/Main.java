@@ -11,8 +11,6 @@ public class Main {
 
     public static final int WINDOW_WIDTH = 512;
     public static final int WINDOW_HEIGHT = 768;
-    private static final String DEFAULT_DIFFICULTY = "normal";
-    private static final String[] DIFFICULTY_OPTIONS = { "easy", "normal", "hard" };
 
     public static void main(String[] args) {
         // 所有 Swing 组件都在 EDT 上创建，避免界面线程问题。

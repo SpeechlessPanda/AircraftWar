@@ -22,7 +22,14 @@ public class PropFactory {
         FREEZE
     }
 
-    private static final PropType[] ELITE_DROP_TYPES = {
+        private static final PropType[] BASIC_ELITE_DROP_TYPES = {
+            PropType.BLOOD,
+            PropType.FIRE,
+            PropType.BOMB,
+            PropType.FREEZE
+        };
+
+        private static final PropType[] ELITE_DROP_TYPES = {
             PropType.BLOOD,
             PropType.FIRE,
             PropType.FIRE_PLUS,
@@ -58,6 +65,11 @@ public class PropFactory {
         }
     }
 
+    public static AbstractProp createRandomForBasicElite(int locationX, int locationY) {
+        int index = ThreadLocalRandom.current().nextInt(BASIC_ELITE_DROP_TYPES.length);
+        return createProp(BASIC_ELITE_DROP_TYPES[index], locationX, locationY);
+    }
+
     public static AbstractProp createRandomForElite(int locationX, int locationY) {
         int index = ThreadLocalRandom.current().nextInt(ELITE_DROP_TYPES.length);
         return createProp(ELITE_DROP_TYPES[index], locationX, locationY);
@@ -69,8 +81,8 @@ public class PropFactory {
         return createProp(ACE_DROP_TYPES[index], locationX, locationY);
     }
 
-    static long countDropTypeForTest(PropType propType, boolean elitePool) {
-        PropType[] pool = elitePool ? ELITE_DROP_TYPES : ACE_DROP_TYPES;
+    static long countDropTypeForTest(PropType propType, boolean basicElitePool, boolean acePool) {
+        PropType[] pool = dropPoolForTest(basicElitePool, acePool);
         long count = 0;
         for (PropType type : pool) {
             if (type == propType) {
@@ -78,6 +90,17 @@ public class PropFactory {
             }
         }
         return count;
+    }
+
+    private static PropType[] dropPoolForTest(boolean basicElitePool, boolean acePool) {
+        if (basicElitePool) {
+            return BASIC_ELITE_DROP_TYPES;
+        }
+        return acePool ? ACE_DROP_TYPES : ELITE_DROP_TYPES;
+    }
+
+    static int getBasicEliteDropPoolSizeForTest() {
+        return BASIC_ELITE_DROP_TYPES.length;
     }
 
     static int getEliteDropPoolSizeForTest() {

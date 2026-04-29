@@ -2,15 +2,17 @@ package edu.hitsz.factory;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PropFactoryProbabilityTest {
 
     @Test
-    void eliteAndAceDropPoolsGiveFreezeSupplyHigherWeight() {
-        assertTrue(PropFactory.countDropTypeForTest(PropFactory.PropType.FREEZE, true) >= 2);
-        assertTrue(PropFactory.countDropTypeForTest(PropFactory.PropType.FREEZE, false) >= 3);
-        assertTrue(PropFactory.getEliteDropPoolSizeForTest() > 4);
-        assertTrue(PropFactory.getAceDropPoolSizeForTest() > PropFactory.PropType.values().length);
+    void dropPoolsKeepFreezeSupplyAtSameWeightAsIncludedProps() {
+        assertEquals(1, PropFactory.countDropTypeForTest(PropFactory.PropType.FREEZE, true, false));
+        assertEquals(1, PropFactory.countDropTypeForTest(PropFactory.PropType.FREEZE, false, false));
+        assertEquals(1, PropFactory.countDropTypeForTest(PropFactory.PropType.FREEZE, false, true));
+        assertEquals(4, PropFactory.getBasicEliteDropPoolSizeForTest());
+        assertEquals(PropFactory.PropType.values().length, PropFactory.getEliteDropPoolSizeForTest());
+        assertEquals(PropFactory.PropType.values().length, PropFactory.getAceDropPoolSizeForTest());
     }
 }

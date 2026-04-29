@@ -1,6 +1,7 @@
 package edu.hitsz.application;
 
 import edu.hitsz.aircraft.BossEnemy;
+import edu.hitsz.aircraft.EliteEnemy;
 import edu.hitsz.prop.AbstractProp;
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +29,23 @@ class BossSupplyDropTest {
                 .map(prop -> prop.getLocationX() + ":" + prop.getLocationY())
                 .collect(Collectors.toSet());
         assertTrue(locations.size() > 1, "Boss drops should not all overlap at the same location");
+    }
+
+    @Test
+    void basicEliteEnemyCanDropSupply() throws Exception {
+        Game game = new NormalGame(null) {
+            @Override
+            protected double supplyDropProbability() {
+                return 1.0;
+            }
+        };
+        Method createSupplyAfterEnemyCrash = Game.class.getDeclaredMethod("createSupplyAfterEnemyCrash",
+                edu.hitsz.aircraft.AbstractAircraft.class);
+        createSupplyAfterEnemyCrash.setAccessible(true);
+
+        createSupplyAfterEnemyCrash.invoke(game, EliteEnemy.createDefault(120, 80));
+
+        assertTrue(propsOf(game).size() == 1, "Basic elite enemies should be eligible to drop one supply");
     }
 
     @SuppressWarnings("unchecked")

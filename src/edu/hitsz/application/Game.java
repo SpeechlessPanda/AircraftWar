@@ -21,7 +21,6 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 import java.util.Timer;
-import java.util.concurrent.*;
 
 /**
  * 游戏主面板，游戏启动
@@ -68,8 +67,6 @@ public abstract class Game extends JPanel {
     private int score = 0;
 
     // 游戏结束标志
-    private boolean gameOverFlag = false;
-
     private static final double MOB_ENEMY_PROBABILITY = 0.40;
     private static final double ELITE_ENEMY_PROBABILITY = 0.25;
     private static final double ELITE_PLUS_ENEMY_PROBABILITY = 0.20;
@@ -319,7 +316,6 @@ public abstract class Game extends JPanel {
         // 游戏结束检查英雄机是否存活
         if (heroAircraft.getHp() <= 0) {
             timer.cancel(); // 取消定时器并终止所有调度任务
-            gameOverFlag = true;
             System.out.println("Game Over!");
             printAchievementSummary();
             audioManager.stopAllLoops();
@@ -628,10 +624,12 @@ public abstract class Game extends JPanel {
         if (Math.random() >= supplyDropProbability()) {
             return;
         }
-        if (enemyAircraft instanceof ElitePlusEnemy) {
-            props.add(PropFactory.createRandomForElite(locationX, locationY));
-        } else if (enemyAircraft instanceof EliteProEnemy) {
+        if (enemyAircraft instanceof EliteProEnemy) {
             props.add(PropFactory.createRandomForAce(locationX, locationY));
+        } else if (enemyAircraft instanceof ElitePlusEnemy) {
+            props.add(PropFactory.createRandomForElite(locationX, locationY));
+        } else if (enemyAircraft instanceof EliteEnemy) {
+            props.add(PropFactory.createRandomForBasicElite(locationX, locationY));
         }
     }
 
