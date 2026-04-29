@@ -24,3 +24,5 @@ Thumbs.db
 # Local project documentation workspace
 docs/
 scores/
+
+*.mp4
