@@ -22,14 +22,14 @@ public class PropFactory {
         FREEZE
     }
 
-        private static final PropType[] BASIC_ELITE_DROP_TYPES = {
+    private static final PropType[] BASIC_ELITE_DROP_TYPES = {
             PropType.BLOOD,
             PropType.FIRE,
             PropType.BOMB,
             PropType.FREEZE
-        };
+    };
 
-        private static final PropType[] ELITE_DROP_TYPES = {
+    private static final PropType[] ELITE_DROP_TYPES = {
             PropType.BLOOD,
             PropType.FIRE,
             PropType.FIRE_PLUS,

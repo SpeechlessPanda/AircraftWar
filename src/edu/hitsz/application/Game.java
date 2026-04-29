@@ -66,7 +66,6 @@ public abstract class Game extends JPanel {
     // 当前玩家分数
     private int score = 0;
 
-    // 游戏结束标志
     private static final double MOB_ENEMY_PROBABILITY = 0.40;
     private static final double ELITE_ENEMY_PROBABILITY = 0.25;
     private static final double ELITE_PLUS_ENEMY_PROBABILITY = 0.20;
