@@ -1,0 +1,53 @@
+@startuml
+title Strategy Pattern - Aircraft Shoot Behavior
+
+interface ShootStrategy <<Strategy>> {
+    + shoot(aircraft: AbstractAircraft): List<BaseBullet>
+}
+
+class NoShootStrategy
+class StraightShootStrategy
+class FanShootStrategy
+class RingShootStrategy
+
+ShootStrategy <|.. NoShootStrategy
+ShootStrategy <|.. StraightShootStrategy
+ShootStrategy <|.. FanShootStrategy
+ShootStrategy <|.. RingShootStrategy
+
+abstract class AbstractAircraft <<Context>> {
+    # shootStrategy: ShootStrategy
+    # shootNum: int
+    # power: int
+    # direction: int
+    + shoot(): List<BaseBullet>
+    + setShootStrategy(shootStrategy: ShootStrategy): void
+}
+
+class HeroAircraft
+class MobEnemy
+class EliteEnemy
+class ElitePlusEnemy
+class EliteProEnemy
+class BossEnemy
+
+AbstractAircraft <|-- HeroAircraft
+AbstractAircraft <|-- MobEnemy
+AbstractAircraft <|-- EliteEnemy
+AbstractAircraft <|-- ElitePlusEnemy
+AbstractAircraft <|-- EliteProEnemy
+AbstractAircraft <|-- BossEnemy
+
+AbstractAircraft o-- ShootStrategy : holds
+
+class FireSupply
+class FirePlusSupply
+FireSupply ..> FanShootStrategy : switch to
+FirePlusSupply ..> RingShootStrategy : switch to
+
+note right of AbstractAircraft
+Context delegates shoot behavior
+to the current ShootStrategy.
+end note
+
+@enduml

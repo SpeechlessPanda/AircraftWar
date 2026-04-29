@@ -1,0 +1,66 @@
+@startuml
+title Template Method Pattern - Game Difficulty Flow
+
+abstract class Game <<AbstractClass>> {
+    - timer: Timer
+    - enemyAircrafts: List<AbstractAircraft>
+    - enemyBullets: List<BaseBullet>
+    - score: int
+    # enemySpawnCycle: double
+    # heroShootCycle: double
+    # enemyShootCycle: double
+    # enemySpeedMultiplier: double
+    # enemyHpMultiplier: double
+    + action(): void <<final template method>>
+    # initialEnemySpawnCycle(): double
+    # initialHeroShootCycle(): double
+    # initialEnemyShootCycle(): double
+    # maxEnemyCount(): int
+    # mobEnemyProbability(): double
+    # eliteEnemyProbability(): double
+    # elitePlusEnemyProbability(): double
+    # canCreateBoss(): boolean
+    # createBossEnemy(locationX: int, locationY: int): AbstractAircraft
+    # applyDifficultyProgression(): void
+}
+
+class EasyGame <<ConcreteClass>> {
+    # canCreateBoss(): boolean
+    # applyDifficultyProgression(): void
+}
+
+class NormalGame <<ConcreteClass>> {
+    # applyDifficultyProgression(): void
+}
+
+class HardGame <<ConcreteClass>> {
+    - bossCreateCount: int
+    # createBossEnemy(locationX: int, locationY: int): AbstractAircraft
+    # applyDifficultyProgression(): void
+}
+
+class GameFactory {
+    + {static} create(difficulty: String, app: AircraftWarApp): Game
+}
+
+class AircraftWarApp
+class GamePagePanel
+
+Game <|-- EasyGame
+Game <|-- NormalGame
+Game <|-- HardGame
+GameFactory ..> EasyGame : create
+GameFactory ..> NormalGame : create
+GameFactory ..> HardGame : create
+GamePagePanel ..> GameFactory : create game
+AircraftWarApp --> GamePagePanel : startGame()
+
+note right of Game::action
+The fixed loop skeleton creates enemies,
+checks Boss generation, shoots, moves,
+checks collisions, applies progression,
+post-processes, repaints, and checks end state.
+Difficulty subclasses override only hooks.
+end note
+
+@enduml

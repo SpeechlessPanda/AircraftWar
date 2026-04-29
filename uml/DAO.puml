@@ -1,0 +1,46 @@
+@startuml
+title DAO Pattern - Score Leaderboard Persistence
+
+class Game <<Client>> {
+    - score:int
+    - difficulty:String
+    - scoreRecordDao:ScoreRecordDao
+    + persistAndPrintLeaderboard():void
+}
+
+interface ScoreRecordDao <<DAO>> {
+    + getAll():List<ScoreRecord>
+    + getAllSorted():List<ScoreRecord>
+    + add(scoreRecord:ScoreRecord):void
+    + deleteByRank(rank:int):boolean
+}
+
+class FileScoreRecordDao <<DAO-Impl>> {
+    - storagePath:Path
+    + FileScoreRecordDao(difficulty:String)
+    + FileScoreRecordDao(storagePath:Path)
+    + getAll():List<ScoreRecord>
+    + getAllSorted():List<ScoreRecord>
+    + add(scoreRecord:ScoreRecord):void
+    + deleteByRank(rank:int):boolean
+}
+
+class ScoreRecord <<VO>> {
+    - playerName:String
+    - score:int
+    - recordTime:LocalDateTime
+    + ofNow(playerName:String, score:int):ScoreRecord
+    + toStorageLine():String
+    + fromStorageLine(line:String):ScoreRecord
+}
+
+Game --> ScoreRecordDao : use
+ScoreRecordDao <|.. FileScoreRecordDao
+FileScoreRecordDao --> ScoreRecord : read/write
+
+note right of FileScoreRecordDao
+Persist records into difficulty-separated files,
+for example: scores/records-normal.txt
+end note
+
+@enduml

@@ -1,0 +1,88 @@
+@startuml
+title Factory Method Pattern - Enemy Creation
+
+interface EnemyFactory <<FactoryMethod>> {
+    + createEnemy(locationX: int, locationY: int): AbstractAircraft
+}
+
+class MobEnemyFactory {
+    + createEnemy(locationX: int, locationY: int): AbstractAircraft
+}
+
+class EliteEnemyFactory {
+    + createEnemy(locationX: int, locationY: int): AbstractAircraft
+}
+
+class ElitePlusEnemyFactory {
+    + createEnemy(locationX: int, locationY: int): AbstractAircraft
+}
+
+class EliteProEnemyFactory {
+    + createEnemy(locationX: int, locationY: int): AbstractAircraft
+}
+
+EnemyFactory <|.. MobEnemyFactory
+EnemyFactory <|.. EliteEnemyFactory
+EnemyFactory <|.. ElitePlusEnemyFactory
+EnemyFactory <|.. EliteProEnemyFactory
+
+abstract class AbstractAircraft {
+    # maxHp:int
+    # hp:int
+    # shootNum:int
+    # power:int
+    # direction:int
+}
+
+class MobEnemy {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    - {static} DEFAULT_HP:int
+    + {static} createDefault(locationX:int, locationY:int):MobEnemy
+    + MobEnemy(locationX:int, locationY:int, speedX:int, speedY:int, hp:int)
+}
+
+class EliteEnemy {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    - {static} DEFAULT_HP:int
+    - {static} DEFAULT_SHOOT_NUM:int
+    - {static} DEFAULT_POWER:int
+    - {static} DEFAULT_DIRECTION:int
+    + {static} createDefault(locationX:int, locationY:int):EliteEnemy
+    + EliteEnemy(locationX:int, locationY:int, speedX:int, speedY:int, hp:int)
+}
+
+class ElitePlusEnemy {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    - {static} DEFAULT_HP:int
+    - {static} DEFAULT_SHOOT_NUM:int
+    - {static} DEFAULT_POWER:int
+    - {static} DEFAULT_DIRECTION:int
+    + {static} createDefault(locationX:int, locationY:int):ElitePlusEnemy
+    + ElitePlusEnemy(locationX:int, locationY:int, speedX:int, speedY:int, hp:int)
+}
+
+class EliteProEnemy {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    - {static} DEFAULT_HP:int
+    - {static} DEFAULT_SHOOT_NUM:int
+    - {static} DEFAULT_POWER:int
+    - {static} DEFAULT_DIRECTION:int
+    + {static} createDefault(locationX:int, locationY:int):EliteProEnemy
+    + EliteProEnemy(locationX:int, locationY:int, speedX:int, speedY:int, hp:int)
+}
+
+AbstractAircraft <|-- MobEnemy
+AbstractAircraft <|-- EliteEnemy
+AbstractAircraft <|-- ElitePlusEnemy
+AbstractAircraft <|-- EliteProEnemy
+
+MobEnemyFactory ..> MobEnemy : createEnemy()
+EliteEnemyFactory ..> EliteEnemy : createEnemy()
+ElitePlusEnemyFactory ..> ElitePlusEnemy : createEnemy()
+EliteProEnemyFactory ..> EliteProEnemy : createEnemy()
+
+@enduml

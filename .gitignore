@@ -1,0 +1,25 @@
+# IDE and editor settings
+.vscode/
+.idea/
+*.iml
+
+# Generated Java outputs
+build/
+out/
+*.class
+
+# Word and office temporary files
+*.doc
+*.docx
+*.docm
+*.dot
+*.dotx
+*.dotm
+~$*
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Local project documentation workspace
+docs/

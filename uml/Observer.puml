@@ -1,0 +1,104 @@
+@startuml
+title Observer Pattern - Bomb and Freeze Props
+
+interface PropObserver <<Observer>> {
+    + onBomb(context: BombEffectContext): void
+    + onFreeze(context: FreezeEffectContext): void
+}
+
+abstract class PropSubject <<Subject>> {
+    - observers: List<PropObserver>
+    + addObserver(observer: PropObserver): void
+    + removeObserver(observer: PropObserver): void
+    # observers(): List<PropObserver>
+}
+
+class BombSubject <<ConcreteSubject>> {
+    + trigger(): BombEffectContext
+}
+
+class FreezeSubject <<ConcreteSubject>> {
+    - context: FreezeEffectContext
+    + trigger(): FreezeEffectContext
+}
+
+class BombEffectContext {
+    - scoreBonus: int
+    + addScoreBonus(value: int): void
+    + getScoreBonus(): int
+}
+
+class FreezeEffectContext {
+    - eliteFreezeMillis: long
+    - elitePlusFreezeMillis: long
+    - eliteProSlowMillis: long
+    - bulletFreezeMillis: long
+    - RESTORE_STATES: Map<AbstractFlyingObject, RestoreState>
+    + freezeTemporarily(object: AbstractFlyingObject, durationMillis: long): void
+    + freezeTemporarily(object: AbstractFlyingObject, durationMillis: long, afterRestore: Runnable): void
+    + slowTemporarily(object: AbstractFlyingObject, factor: double, durationMillis: long): void
+    + shutdown(): void
+}
+
+abstract class AbstractAircraft <<Observer>> {
+    - shootingDisabledByFreeze: boolean
+    + shoot(): List<BaseBullet>
+    # freezeMovementAndShootingTemporarily(context: FreezeEffectContext, durationMillis: long): void
+}
+class MobEnemy {
+    + onFreeze(context: FreezeEffectContext): void
+}
+class EliteEnemy {
+    + onFreeze(context: FreezeEffectContext): void
+}
+class ElitePlusEnemy {
+    + onFreeze(context: FreezeEffectContext): void
+}
+class EliteProEnemy {
+    + onFreeze(context: FreezeEffectContext): void
+}
+class BossEnemy
+abstract class BaseBullet <<Observer>> {
+    - frozenBySupply: boolean
+    + isFrozenBySupply(): boolean
+    + isTemporarySpeedLocked(): boolean
+    + onFreeze(context: FreezeEffectContext): void
+}
+class EnemyBullet
+
+PropSubject <|-- BombSubject
+PropSubject <|-- FreezeSubject
+PropObserver <|.. AbstractAircraft
+PropObserver <|.. BaseBullet
+
+AbstractAircraft <|-- MobEnemy
+AbstractAircraft <|-- EliteEnemy
+AbstractAircraft <|-- ElitePlusEnemy
+AbstractAircraft <|-- EliteProEnemy
+AbstractAircraft <|-- BossEnemy
+BaseBullet <|-- EnemyBullet
+
+BombSubject ..> BombEffectContext : create / notify
+FreezeSubject --> FreezeEffectContext : use
+PropSubject o-- PropObserver : maintains
+AbstractAircraft ..> BombEffectContext : onBomb()
+AbstractAircraft ..> FreezeEffectContext : onFreeze()
+BaseBullet ..> BombEffectContext : onBomb()
+BaseBullet ..> FreezeEffectContext : onFreeze()
+
+note right of BombSubject
+BombSupply is collected by the hero,
+then Game registers current enemies
+and enemy bullets before triggering.
+end note
+
+note right of FreezeSubject
+FreezeSupply only notifies current enemies
+and enemy bullets at collection time.
+Frozen shooting enemies stop shooting until
+their timed freeze restores. Frozen enemy
+bullets stay stopped for the configured
+duration and then restore original speed.
+end note
+
+@enduml

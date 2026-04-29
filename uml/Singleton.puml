@@ -1,0 +1,24 @@
+@startuml
+title Singleton Pattern - HeroAircraft
+
+class HeroAircraft <<Singleton>> {
+    - {static} volatile heroAircraft:HeroAircraft
+    - {static} INIT_LOCATION_X:int
+    - {static} INIT_LOCATION_Y:int
+    - {static} INIT_SPEED_X:int
+    - {static} INIT_SPEED_Y:int
+    - {static} INIT_HP:int
+    - {static} INIT_SHOOT_NUM:int
+    - {static} INIT_POWER:int
+    - {static} INIT_DIRECTION:int
+    - HeroAircraft()
+    + {static} getInstance():HeroAircraft
+    + forward():void
+}
+
+note right of HeroAircraft
+Double-Checked Locking (DCL)
+is used for singleton creation.
+end note
+
+@enduml

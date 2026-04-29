@@ -1,0 +1,235 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class AbstractFlyingObject
+{
+    # locationX:int
+    # locationY:int
+    # speedX:int
+    # speedY:int
+    # image:BufferedImage
+    # width:int
+    # height:int
+    # isValid:boolean
+
+    + AbstractFlyingObject()
+    + AbstractFlyingObject(int locationX, int locationY, int speedX, int speedY)
+    + forward():void
+    + crash(AbstractFlyingObject flyingObject):boolean
+    + setLocation(double locationX, double locationY):void
+    + getLocationX():int
+    + getLocationY():int
+    + getSpeedY():int
+    + getImage():BufferedImage
+    + getWidth():int
+    + getHeight():int
+    + notValid():boolean
+    + vanish():void
+}
+
+interface PropObserver {
+    + onBomb(context:BombEffectContext):void
+    + onFreeze(context:FreezeEffectContext):void
+}
+
+abstract class Game {
+    + action():void
+}
+
+class EasyGame
+class NormalGame
+class HardGame
+
+Game <|-- EasyGame
+Game <|-- NormalGame
+Game <|-- HardGame
+abstract class AbstractAircraft
+{
+	# maxHp:int
+    # hp:int
+    # shootNum:int
+    # power:int
+    # direction:int
+    # shootStrategy:ShootStrategy
+    - shootingDisabledByFreeze:boolean
+    + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
+    + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp, int shootNum, int power, int direction)
+    + decreaseHp(int decrease):void
+    + getHp():int
+    + increaseHp(int increase):void
+    + shoot():List<BaseBullet>
+    + setShootStrategy(shootStrategy:ShootStrategy):void
+    + getShootNum():int
+    + getPower():int
+    + getDirection():int
+    + setShootNum(shootNum:int):void
+    # freezeMovementAndShootingTemporarily(context:FreezeEffectContext, durationMillis:long):void
+ }
+
+
+class HeroAircraft {
+    - {static} volatile heroAircraft:HeroAircraft
+    - {static} INIT_LOCATION_X:int
+    - {static} INIT_LOCATION_Y:int
+    - {static} INIT_SPEED_X:int
+    - {static} INIT_SPEED_Y:int
+    - {static} INIT_HP:int
+    - {static} INIT_SHOOT_NUM:int
+    - {static} INIT_POWER:int
+    - {static} INIT_DIRECTION:int
+    - HeroAircraft()
+    + {static} getInstance():HeroAircraft
+    + forward():void
+}
+
+AbstractAircraft <|-- HeroAircraft
+PropObserver <|.. AbstractAircraft
+
+class MobEnemy {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    - {static} DEFAULT_HP:int
+    + {static} createDefault(int locationX, int locationY):MobEnemy
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+}
+AbstractAircraft <|-- MobEnemy
+
+class EliteEnemy {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    - {static} DEFAULT_HP:int
+    - {static} DEFAULT_SHOOT_NUM:int
+    - {static} DEFAULT_POWER:int
+    - {static} DEFAULT_DIRECTION:int
+    + {static} createDefault(int locationX, int locationY):EliteEnemy
+    + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+    + onFreeze(context:FreezeEffectContext):void
+}
+AbstractAircraft <|-- EliteEnemy
+
+class ElitePlusEnemy {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    - {static} DEFAULT_HP:int
+    - {static} DEFAULT_SHOOT_NUM:int
+    - {static} DEFAULT_POWER:int
+    - {static} DEFAULT_DIRECTION:int
+    + {static} createDefault(int locationX, int locationY):ElitePlusEnemy
+    + ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+    + onFreeze(context:FreezeEffectContext):void
+}
+AbstractAircraft <|-- ElitePlusEnemy
+
+class EliteProEnemy {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    - {static} DEFAULT_HP:int
+    - {static} DEFAULT_SHOOT_NUM:int
+    - {static} DEFAULT_POWER:int
+    - {static} DEFAULT_DIRECTION:int
+    + {static} createDefault(int locationX, int locationY):EliteProEnemy
+    + EliteProEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+    + onFreeze(context:FreezeEffectContext):void
+}
+AbstractAircraft <|-- EliteProEnemy
+
+class BossEnemy {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    - {static} DEFAULT_HP:int
+    - {static} DEFAULT_SHOOT_NUM:int
+    - {static} DEFAULT_POWER:int
+    - {static} DEFAULT_DIRECTION:int
+    + {static} createDefault(int locationX, int locationY):BossEnemy
+    + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+}
+AbstractAircraft <|-- BossEnemy
+
+abstract class BaseBullet
+{
+    - power:int
+    - frozenBySupply:boolean
+    + BaseBullet(int locationX, int locationY, int speedX, int speedY, int power)
+    + forward():void
+	+ getPower():int
+    + isFrozenBySupply():boolean
+    + isTemporarySpeedLocked():boolean
+    + onFreeze(context:FreezeEffectContext):void
+}
+
+class HeroBullet {
+    + HeroBullet(int locationX, int locationY,
+     int speedX, int speedY, int power)
+}
+
+class EnemyBullet {
+    + EnemyBullet(int locationX, int locationY,
+     int speedX, int speedY, int power)
+}
+
+BaseBullet <|-- HeroBullet
+BaseBullet <|-- EnemyBullet
+PropObserver <|.. BaseBullet
+
+abstract class AbstractProp {
+    + AbstractProp(int locationX, int locationY, int speedX, int speedY)
+    + forward():void
+    + {abstract} active(HeroAircraft heroAircraft):void
+}
+AbstractFlyingObject <|-- AbstractProp
+
+class BloodSupply {
+    - {static} HEALING_VALUE:int
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    + {static} createDefault(int locationX, int locationY):BloodSupply
+    + BloodSupply(int locationX, int locationY, int speedX, int speedY)
+    + active(HeroAircraft heroAircraft):void
+}
+AbstractProp <|-- BloodSupply
+
+class FireSupply {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    + {static} createDefault(int locationX, int locationY):FireSupply
+    + FireSupply(int locationX, int locationY, int speedX, int speedY)
+    + active(HeroAircraft heroAircraft):void
+}
+AbstractProp <|-- FireSupply
+
+class FirePlusSupply {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    + {static} createDefault(int locationX, int locationY):FirePlusSupply
+    + FirePlusSupply(int locationX, int locationY, int speedX, int speedY)
+    + active(HeroAircraft heroAircraft):void
+}
+AbstractProp <|-- FirePlusSupply
+
+class BombSupply {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    + {static} createDefault(int locationX, int locationY):BombSupply
+    + BombSupply(int locationX, int locationY, int speedX, int speedY)
+    + active(HeroAircraft heroAircraft):void
+}
+AbstractProp <|-- BombSupply
+
+class FreezeSupply {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    + {static} createDefault(int locationX, int locationY):FreezeSupply
+    + FreezeSupply(int locationX, int locationY, int speedX, int speedY)
+    + active(HeroAircraft heroAircraft):void
+}
+AbstractProp <|-- FreezeSupply
+
+AbstractFlyingObject <|-- AbstractAircraft
+AbstractFlyingObject <|-- BaseBullet
+
+@enduml

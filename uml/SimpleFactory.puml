@@ -1,0 +1,88 @@
+@startuml
+title Simple Factory Pattern - Prop Creation
+
+class PropFactory <<SimpleFactory>> {
+    - {static} ELITE_DROP_TYPES: PropType[]
+    - {static} ACE_DROP_TYPES: PropType[]
+    - PropFactory()
+    + {static} createProp(propType: PropType, locationX: int, locationY: int): AbstractProp
+    + {static} createRandomForElite(locationX: int, locationY: int): AbstractProp
+    + {static} createRandomForAce(locationX: int, locationY: int): AbstractProp
+}
+
+enum PropType {
+    BLOOD
+    FIRE
+    FIRE_PLUS
+    BOMB
+    FREEZE
+}
+
+abstract class AbstractProp {
+    + AbstractProp(locationX:int, locationY:int, speedX:int, speedY:int)
+    + forward():void
+    + {abstract} active(heroAircraft:HeroAircraft):void
+}
+
+class BloodSupply {
+    - {static} HEALING_VALUE:int
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    + {static} createDefault(locationX:int, locationY:int):BloodSupply
+    + BloodSupply(locationX:int, locationY:int, speedX:int, speedY:int)
+    + active(heroAircraft:HeroAircraft):void
+}
+
+class FireSupply {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    + {static} createDefault(locationX:int, locationY:int):FireSupply
+    + FireSupply(locationX:int, locationY:int, speedX:int, speedY:int)
+    + active(heroAircraft:HeroAircraft):void
+}
+
+class FirePlusSupply {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    + {static} createDefault(locationX:int, locationY:int):FirePlusSupply
+    + FirePlusSupply(locationX:int, locationY:int, speedX:int, speedY:int)
+    + active(heroAircraft:HeroAircraft):void
+}
+
+class BombSupply {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    + {static} createDefault(locationX:int, locationY:int):BombSupply
+    + BombSupply(locationX:int, locationY:int, speedX:int, speedY:int)
+    + active(heroAircraft:HeroAircraft):void
+}
+
+class FreezeSupply {
+    - {static} DEFAULT_SPEED_X:int
+    - {static} DEFAULT_SPEED_Y:int
+    + {static} createDefault(locationX:int, locationY:int):FreezeSupply
+    + FreezeSupply(locationX:int, locationY:int, speedX:int, speedY:int)
+    + active(heroAircraft:HeroAircraft):void
+}
+
+AbstractProp <|-- BloodSupply
+AbstractProp <|-- FireSupply
+AbstractProp <|-- FirePlusSupply
+AbstractProp <|-- BombSupply
+AbstractProp <|-- FreezeSupply
+
+PropFactory ..> PropType
+PropFactory ..> AbstractProp
+PropFactory ..> BloodSupply : createDefault()
+PropFactory ..> FireSupply : createDefault()
+PropFactory ..> FirePlusSupply : createDefault()
+PropFactory ..> BombSupply : createDefault()
+PropFactory ..> FreezeSupply : createDefault()
+
+note right of PropFactory
+Simple Factory centralizes prop creation.
+Elite drop: BLOOD/FIRE/FIRE_PLUS/BOMB.
+Ace drop: all five prop types.
+end note
+
+@enduml
