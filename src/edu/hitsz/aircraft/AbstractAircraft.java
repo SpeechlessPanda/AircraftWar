@@ -112,6 +112,22 @@ public abstract class AbstractAircraft extends AbstractFlyingObject implements P
         hp += increase;
     }
 
+    protected void resetAircraftState(int locationX, int locationY, int speedX, int speedY, int hp, int shootNum,
+            int power, int direction, ShootStrategy shootStrategy) {
+        this.locationX = locationX;
+        this.locationY = locationY;
+        this.speedX = speedX;
+        this.speedY = speedY;
+        this.hp = hp;
+        this.maxHp = hp;
+        this.shootNum = shootNum;
+        this.power = power;
+        this.direction = direction;
+        this.shootingDisabledByFreeze = false;
+        this.isValid = true;
+        setShootStrategy(shootStrategy);
+    }
+
     @Override
     public void onBomb(BombEffectContext context) {
         if (!notValid()) {

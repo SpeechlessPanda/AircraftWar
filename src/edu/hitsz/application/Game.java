@@ -110,6 +110,7 @@ public abstract class Game extends JPanel {
         this.enemyShootCycle = initialEnemyShootCycle();
         this.nextBossScore = bossScoreThreshold();
         heroAircraft = HeroAircraft.getInstance();
+        heroAircraft.resetForNewGame();
 
         enemyAircrafts = new LinkedList<>();
         heroBullets = new LinkedList<>();

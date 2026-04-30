@@ -58,14 +58,16 @@ java -cp out edu.hitsz.application.Main hard
 下载发布包并解压后，在解压目录执行：
 
 ```powershell
-java -jar AircraftWar-0.1.0.jar
+java -jar AircraftWar-0.1.1.jar
 ```
 
 如果需要直接进入指定难度，可追加难度参数：
 
 ```powershell
-java -jar AircraftWar-0.1.0.jar hard
+java -jar AircraftWar-0.1.1.jar hard
 ```
+
+Windows 用户也可以下载 `AircraftWar-0.1.1-windows-x64.zip`，解压后双击 `AircraftWar\AircraftWar.exe`。该包内置运行时，首次下载解压后，后续不需要再安装 JDK 或重复配置命令。
 
 ### 生成发布包
 
@@ -78,6 +80,13 @@ javac -encoding UTF-8 -d build\classes (Get-ChildItem -Recurse src -Filter *.jav
 Copy-Item -Recurse src\images build\classes\images
 Copy-Item -Recurse src\videos build\classes\videos
 jar --create --file build\release\AircraftWar-0.1.0.jar --main-class edu.hitsz.application.Main -C build\classes .
+```
+
+生成 Windows 可执行程序包需要 JDK 自带 `jpackage`：
+
+```powershell
+jpackage --type app-image --name AircraftWar --app-version 0.1.1 --input build\release\package-input --main-jar AircraftWar-0.1.1.jar --dest build\release\windows-x64
+Compress-Archive -Path build\release\windows-x64\AircraftWar -DestinationPath build\release\AircraftWar-0.1.1-windows-x64.zip -Force
 ```
 
 ## 测试

@@ -45,6 +45,11 @@ public class HeroAircraft extends AbstractAircraft {
         setShootNum(INIT_SHOOT_NUM);
     }
 
+    public void resetForNewGame() {
+        resetAircraftState(INIT_LOCATION_X, INIT_LOCATION_Y, INIT_SPEED_X, INIT_SPEED_Y, INIT_HP, INIT_SHOOT_NUM,
+                INIT_POWER, INIT_DIRECTION, new StraightShootStrategy());
+    }
+
     @Override
     public void forward() {
         // 英雄机由鼠标控制，不通过forward函数移动
