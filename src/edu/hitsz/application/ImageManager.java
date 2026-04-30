@@ -16,7 +16,6 @@ import edu.hitsz.prop.FreezeSupply;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,23 +54,23 @@ public class ImageManager {
     static {
         try {
 
-            BACKGROUND_IMAGE = ImageIO.read(new FileInputStream("src/images/bg.jpg"));
-            BACKGROUND_IMAGE_2 = ImageIO.read(new FileInputStream("src/images/bg2.jpg"));
-            BACKGROUND_IMAGE_3 = ImageIO.read(new FileInputStream("src/images/bg3.jpg"));
+            BACKGROUND_IMAGE = loadImage("src/images/bg.jpg");
+            BACKGROUND_IMAGE_2 = loadImage("src/images/bg2.jpg");
+            BACKGROUND_IMAGE_3 = loadImage("src/images/bg3.jpg");
 
-            HERO_IMAGE = ImageIO.read(new FileInputStream("src/images/hero.png"));
-            MOB_ENEMY_IMAGE = ImageIO.read(new FileInputStream("src/images/mob.png"));
-            ELITE_ENEMY_IMAGE = ImageIO.read(new FileInputStream("src/images/elite.png"));
-            ELITE_PLUS_ENEMY_IMAGE = ImageIO.read(new FileInputStream("src/images/elitePlus.png"));
-            ELITE_PRO_ENEMY_IMAGE = ImageIO.read(new FileInputStream("src/images/elitePro.png"));
-            BOSS_ENEMY_IMAGE = ImageIO.read(new FileInputStream("src/images/boss.png"));
-            HERO_BULLET_IMAGE = ImageIO.read(new FileInputStream("src/images/bullet_hero.png"));
-            ENEMY_BULLET_IMAGE = ImageIO.read(new FileInputStream("src/images/bullet_enemy.png"));
-            BLOOD_SUPPLY_IMAGE = ImageIO.read(new FileInputStream("src/images/prop_blood.png"));
-            FIRE_SUPPLY_IMAGE = ImageIO.read(new FileInputStream("src/images/prop_bullet.png"));
-            FIRE_PLUS_SUPPLY_IMAGE = ImageIO.read(new FileInputStream("src/images/prop_bulletPlus.png"));
-            BOMB_SUPPLY_IMAGE = ImageIO.read(new FileInputStream("src/images/prop_bomb.png"));
-            FREEZE_SUPPLY_IMAGE = ImageIO.read(new FileInputStream("src/images/prop_freeze.png"));
+            HERO_IMAGE = loadImage("src/images/hero.png");
+            MOB_ENEMY_IMAGE = loadImage("src/images/mob.png");
+            ELITE_ENEMY_IMAGE = loadImage("src/images/elite.png");
+            ELITE_PLUS_ENEMY_IMAGE = loadImage("src/images/elitePlus.png");
+            ELITE_PRO_ENEMY_IMAGE = loadImage("src/images/elitePro.png");
+            BOSS_ENEMY_IMAGE = loadImage("src/images/boss.png");
+            HERO_BULLET_IMAGE = loadImage("src/images/bullet_hero.png");
+            ENEMY_BULLET_IMAGE = loadImage("src/images/bullet_enemy.png");
+            BLOOD_SUPPLY_IMAGE = loadImage("src/images/prop_blood.png");
+            FIRE_SUPPLY_IMAGE = loadImage("src/images/prop_bullet.png");
+            FIRE_PLUS_SUPPLY_IMAGE = loadImage("src/images/prop_bulletPlus.png");
+            BOMB_SUPPLY_IMAGE = loadImage("src/images/prop_bomb.png");
+            FREEZE_SUPPLY_IMAGE = loadImage("src/images/prop_freeze.png");
 
             CLASSNAME_IMAGE_MAP.put(HeroAircraft.class.getName(), HERO_IMAGE);
             CLASSNAME_IMAGE_MAP.put(MobEnemy.class.getName(), MOB_ENEMY_IMAGE);
@@ -88,9 +87,16 @@ public class ImageManager {
             CLASSNAME_IMAGE_MAP.put(FreezeSupply.class.getName(), FREEZE_SUPPLY_IMAGE);
 
         } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(-1);
+            throw new ExceptionInInitializerError(e);
         }
+    }
+
+    private static BufferedImage loadImage(String location) throws IOException {
+        BufferedImage image = ImageIO.read(ResourceManager.openStream(location));
+        if (image == null) {
+            throw new IOException("Unsupported image resource: " + location);
+        }
+        return image;
     }
 
     public static BufferedImage get(String className) {

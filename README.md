@@ -51,7 +51,34 @@ java -cp out edu.hitsz.application.Main
 java -cp out edu.hitsz.application.Main hard
 ```
 
-注意：图片和音频资源通过相对路径加载，请在项目根目录运行命令。
+开发目录运行时，图片和音频资源会从 `src/images/` 与 `src/videos/` 读取；打包为 JAR 后会优先从 JAR 内的 `images/` 与 `videos/` 资源目录读取。
+
+### 运行发布包
+
+下载发布包并解压后，在解压目录执行：
+
+```powershell
+java -jar AircraftWar-0.1.0.jar
+```
+
+如果需要直接进入指定难度，可追加难度参数：
+
+```powershell
+java -jar AircraftWar-0.1.0.jar hard
+```
+
+### 生成发布包
+
+项目不依赖 Maven 或 Gradle。发布包可用 JDK 自带工具生成，资源目录需放在 classpath 根目录下的 `images/` 和 `videos/`：
+
+```powershell
+Remove-Item -Recurse -Force build\classes,build\release -ErrorAction SilentlyContinue
+New-Item -ItemType Directory -Force build\classes,build\release | Out-Null
+javac -encoding UTF-8 -d build\classes (Get-ChildItem -Recurse src -Filter *.java | ForEach-Object FullName)
+Copy-Item -Recurse src\images build\classes\images
+Copy-Item -Recurse src\videos build\classes\videos
+jar --create --file build\release\AircraftWar-0.1.0.jar --main-class edu.hitsz.application.Main -C build\classes .
+```
 
 ## 测试
 

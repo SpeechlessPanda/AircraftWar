@@ -24,7 +24,7 @@ public class AudioPlayer extends Thread {
 
     @Override
     public void run() {
-        try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath))) {
+        try (AudioInputStream audioInputStream = ResourceManager.openAudioInputStream(filePath)) {
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             if (loop) {
@@ -38,8 +38,8 @@ public class AudioPlayer extends Thread {
                 // 某些环境里 clip.start() 后不会立刻进入 running，需等待实际播放完成。
                 waitForEffectCompletion(clip);
             }
-        } catch (Exception ignored) {
-            // Audio playback should not crash the game loop.
+        } catch (Exception e) {
+            System.err.println("Failed to play audio resource: " + filePath + " (" + e.getMessage() + ")");
         } finally {
             if (clip != null) {
                 clip.stop();
