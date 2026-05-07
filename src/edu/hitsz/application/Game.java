@@ -70,7 +70,7 @@ public abstract class Game extends JPanel {
     private static final double ELITE_ENEMY_PROBABILITY = 0.25;
     private static final double ELITE_PLUS_ENEMY_PROBABILITY = 0.20;
     // 提高总掉落率，让玩家更频繁拿到补给，从资源侧进一步降低难度。
-    private static final double SUPPLY_DROP_PROBABILITY = 0.80;
+    private static final double SUPPLY_DROP_PROBABILITY = 0.65;
     private static final int BOSS_SCORE_THRESHOLD = 500;
     private static final int BOSS_SUPPLY_DROP_COUNT = 3;
 
