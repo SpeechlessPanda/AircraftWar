@@ -48,6 +48,6 @@ public class EasyGame extends Game {
 
     @Override
     protected double supplyDropProbability() {
-        return 0.92;
+        return 0.40;
     }
 }

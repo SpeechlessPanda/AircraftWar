@@ -38,6 +38,8 @@ public class AudioPlayer extends Thread {
                 // 某些环境里 clip.start() 后不会立刻进入 running，需等待实际播放完成。
                 waitForEffectCompletion(clip);
             }
+        } catch (InterruptedException e) {
+            // stopPlayback() 触发的正常中断，不是错误
         } catch (Exception e) {
             System.err.println("Failed to play audio resource: " + filePath + " (" + e.getMessage() + ")");
         } finally {

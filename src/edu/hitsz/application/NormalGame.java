@@ -33,6 +33,6 @@ public class NormalGame extends Game {
 
     @Override
     protected double supplyDropProbability() {
-        return 0.82;
+        return 0.25;
     }
 }

@@ -32,7 +32,7 @@ class GameTest {
         Field field = Game.class.getDeclaredField("SUPPLY_DROP_PROBABILITY");
         field.setAccessible(true);
 
-        assertEquals(0.80, field.getDouble(null), 0.0001);
+        assertEquals(0.30, field.getDouble(null), 0.0001);
     }
 
     @Test

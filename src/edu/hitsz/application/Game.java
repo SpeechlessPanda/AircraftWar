@@ -70,7 +70,7 @@ public abstract class Game extends JPanel {
     private static final double ELITE_ENEMY_PROBABILITY = 0.25;
     private static final double ELITE_PLUS_ENEMY_PROBABILITY = 0.20;
     // 提高总掉落率，让玩家更频繁拿到补给，从资源侧进一步降低难度。
-    private static final double SUPPLY_DROP_PROBABILITY = 0.65;
+    private static final double SUPPLY_DROP_PROBABILITY = 0.30;
     private static final int BOSS_SCORE_THRESHOLD = 500;
     private static final int BOSS_SUPPLY_DROP_COUNT = 3;
 
@@ -326,7 +326,7 @@ public abstract class Game extends JPanel {
                 persistAndPrintLeaderboard();
             }
         }
-    };
+    }
 
     private void persistAndPrintLeaderboard() {
         scoreRecordDao.add(buildDefaultScoreRecord(score));
@@ -419,10 +419,7 @@ public abstract class Game extends JPanel {
         AbstractAircraft candidate = enemyFactory.createEnemy(locationX, locationY);
         scaleEnemyForDifficulty(candidate);
         // 如果该轮随机到的敌机会突破共存上限，就直接跳过这次生成以降低屏幕压力。
-        if (!canSpawnEnemyInCurrentDifficulty(candidate)) {
-            return null;
-        }
-        return candidate;
+        return canSpawnEnemyInCurrentDifficulty(candidate) ? candidate : null;
     }
 
     static boolean canSpawnEnemy(List<AbstractAircraft> currentEnemies, AbstractAircraft candidate) {
