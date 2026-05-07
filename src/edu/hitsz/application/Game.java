@@ -32,10 +32,10 @@ public abstract class Game extends JPanel {
     private static final String DEFAULT_DIFFICULTY = "normal";
     private static final String DEFAULT_PLAYER_NAME = "Player";
     private static final int DEFAULT_MAX_ENEMY_COUNT = 7;
-    private static final int DEFAULT_MAX_ELITE_ENEMY_COUNT = 2;
-    private static final int DEFAULT_MAX_ELITE_PLUS_ENEMY_COUNT = 2;
-    private static final int DEFAULT_MAX_ELITE_PRO_ENEMY_COUNT = 2;
-    private static final int DEFAULT_MAX_TOTAL_ELITE_COUNT = 4;
+    private static final int DEFAULT_MAX_ELITE_ENEMY_COUNT = 1;
+    private static final int DEFAULT_MAX_ELITE_PLUS_ENEMY_COUNT = 1;
+    private static final int DEFAULT_MAX_ELITE_PRO_ENEMY_COUNT = 1;
+    private static final int DEFAULT_MAX_TOTAL_ELITE_COUNT = 3;
     private static final int DEFAULT_MAX_BOSS_COUNT = 1;
     private final BufferedImage backgroundImage;
 
@@ -71,7 +71,7 @@ public abstract class Game extends JPanel {
     private static final double ELITE_PLUS_ENEMY_PROBABILITY = 0.20;
     // 提高总掉落率，让玩家更频繁拿到补给，从资源侧进一步降低难度。
     private static final double SUPPLY_DROP_PROBABILITY = 0.30;
-    private static final int BOSS_SCORE_THRESHOLD = 500;
+    private static final int BOSS_SCORE_THRESHOLD = 300;
     private static final int BOSS_SUPPLY_DROP_COUNT = 3;
 
     private final EnemyFactory mobEnemyFactory = new MobEnemyFactory();
@@ -139,9 +139,15 @@ public abstract class Game extends JPanel {
                 enemySpawnCounter++;
                 if (enemySpawnCounter >= enemySpawnCycle) {
                     enemySpawnCounter = 0;
-                    AbstractAircraft newEnemy = createEnemyAircraft();
-                    if (newEnemy != null) {
-                        enemyAircrafts.add(newEnemy);
+                    boolean spawnedElite = false;
+                    for (int i = 0; i < 2; i++) {
+                        AbstractAircraft newEnemy = createEnemyAircraft(spawnedElite);
+                        if (newEnemy != null) {
+                            enemyAircrafts.add(newEnemy);
+                            if (isEliteEnemy(newEnemy)) {
+                                spawnedElite = true;
+                            }
+                        }
                     }
                 }
                 createBossWhenNeeded();
@@ -412,10 +418,10 @@ public abstract class Game extends JPanel {
         g.drawString("LIFE: " + this.heroAircraft.getHp(), x, y);
     }
 
-    private AbstractAircraft createEnemyAircraft() {
+    private AbstractAircraft createEnemyAircraft(boolean forceMob) {
         int locationX = (int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.MOB_ENEMY_IMAGE.getWidth()));
         int locationY = (int) (Math.random() * Main.WINDOW_HEIGHT * 0.05);
-        EnemyFactory enemyFactory = chooseEnemyFactory();
+        EnemyFactory enemyFactory = forceMob ? mobEnemyFactory : chooseEnemyFactory();
         AbstractAircraft candidate = enemyFactory.createEnemy(locationX, locationY);
         scaleEnemyForDifficulty(candidate);
         // 如果该轮随机到的敌机会突破共存上限，就直接跳过这次生成以降低屏幕压力。
@@ -547,6 +553,10 @@ public abstract class Game extends JPanel {
         }
     }
 
+    private static boolean isEliteEnemy(AbstractAircraft enemy) {
+        return enemy instanceof EliteEnemy || enemy instanceof ElitePlusEnemy || enemy instanceof EliteProEnemy;
+    }
+
     private static long countActiveEnemies(List<AbstractAircraft> currentEnemies) {
         return currentEnemies.stream().filter(Objects::nonNull).filter(enemy -> !enemy.notValid()).count();
     }
@@ -616,6 +626,9 @@ public abstract class Game extends JPanel {
                 int propY = Math.max(20, Math.min(Main.WINDOW_HEIGHT - 20, locationY + offsetY));
                 props.add(PropFactory.createRandomForAce(propX, propY));
             }
+            return;
+        }
+        if (!props.isEmpty()) {
             return;
         }
         if (Math.random() >= supplyDropProbability()) {

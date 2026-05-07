@@ -24,40 +24,36 @@ class GameSpawnLimitTest {
                 MobEnemy.createDefault(20, 10),
                 MobEnemy.createDefault(25, 10),
                 EliteEnemy.createDefault(30, 10),
-                EliteEnemy.createDefault(35, 10),
-                EliteEnemy.createDefault(30, 10),
-                ElitePlusEnemy.createDefault(40, 10));
+                ElitePlusEnemy.createDefault(35, 10),
+                EliteProEnemy.createDefault(40, 10),
+                MobEnemy.createDefault(45, 10));
 
         assertFalse(Game.canSpawnEnemy(enemies, MobEnemy.createDefault(50, 10)));
     }
 
     @Test
-    void allowSecondEliteOfSameTypeButRejectThird() {
-        List<AbstractAircraft> enemies = Arrays.asList(
-                EliteProEnemy.createDefault(30, 10),
-                EliteProEnemy.createDefault(60, 10));
+    void rejectSecondEliteOfSameType() {
+        List<AbstractAircraft> enemies = Collections.singletonList(
+                EliteProEnemy.createDefault(30, 10));
 
         assertFalse(Game.canSpawnEnemy(enemies, EliteProEnemy.createDefault(60, 10)));
         assertTrue(Game.canSpawnEnemy(enemies, MobEnemy.createDefault(60, 10)));
     }
 
     @Test
-    void rejectSpawnWhenCombinedEliteCountWouldExceedFour() {
+    void rejectSpawnWhenCombinedEliteCountWouldExceedThree() {
         List<AbstractAircraft> enemies = Arrays.asList(
                 EliteEnemy.createDefault(20, 10),
-                EliteEnemy.createDefault(30, 10),
-                ElitePlusEnemy.createDefault(40, 10),
-                EliteProEnemy.createDefault(50, 10));
+                ElitePlusEnemy.createDefault(30, 10),
+                EliteProEnemy.createDefault(40, 10));
 
         assertFalse(Game.canSpawnEnemy(enemies, ElitePlusEnemy.createDefault(60, 10)));
     }
 
     @Test
-    void rejectSpawnForBossButAllowSecondEliteCopiesBeforeCombinedCap() {
-        assertTrue(Game.canSpawnEnemy(Collections.singletonList(EliteEnemy.createDefault(20, 10)),
+    void rejectBossDuplicateAndEliteDuplicate() {
+        assertFalse(Game.canSpawnEnemy(Collections.singletonList(EliteEnemy.createDefault(20, 10)),
                 EliteEnemy.createDefault(40, 10)));
-        assertTrue(Game.canSpawnEnemy(Collections.singletonList(ElitePlusEnemy.createDefault(20, 10)),
-                ElitePlusEnemy.createDefault(40, 10)));
         assertFalse(Game.canSpawnEnemy(Collections.singletonList(BossEnemy.createDefault(20, 10)),
                 BossEnemy.createDefault(40, 10)));
     }

@@ -68,7 +68,7 @@ public class HardGame extends Game {
 
     @Override
     protected double supplyDropProbability() {
-        return 0.12;
+        return 0.30;
     }
 
     @Override

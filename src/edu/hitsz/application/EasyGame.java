@@ -28,17 +28,17 @@ public class EasyGame extends Game {
 
     @Override
     protected double mobEnemyProbability() {
-        return 0.70;
+        return 0.50;
     }
 
     @Override
     protected double eliteEnemyProbability() {
-        return 0.20;
+        return 0.25;
     }
 
     @Override
     protected double elitePlusEnemyProbability() {
-        return 0.08;
+        return 0.15;
     }
 
     @Override
@@ -48,6 +48,6 @@ public class EasyGame extends Game {
 
     @Override
     protected double supplyDropProbability() {
-        return 0.40;
+        return 0.55;
     }
 }
