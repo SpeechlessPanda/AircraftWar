@@ -5,6 +5,7 @@
   <img src="https://img.shields.io/badge/GUI-Swing-007396?style=for-the-badge&logo=openjdk&logoColor=white" alt="Swing" />
   <img src="https://img.shields.io/badge/Test-JUnit%205-25A162?style=for-the-badge&logo=junit5&logoColor=white" alt="JUnit 5" />
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=for-the-badge" alt="Platform" />
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License MIT" />
 </p>
 
 AircraftWar 是一个基于 Java Swing 的“飞机大战”课程实验项目。项目在可运行的桌面游戏基础上，集中练习了单例、工厂方法、策略、模板方法、观察者和 DAO 等面向对象设计模式。
